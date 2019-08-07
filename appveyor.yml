@@ -1,0 +1,18 @@
+branches:
+  only:
+    - clone
+
+image: Visual Studio 2019
+
+init:
+- ps: Update-AppveyorBuild -Version "$(Get-Date -format yyyy.MM.dd):$env:appveyor_build_number"
+
+before_build:
+- nuget restore
+
+build:
+  verbosity: minimal
+
+after_build:
+- cd %APPVEYOR_BUILD_FOLDER%\GeminiCI\bin\Debug
+- GeminiCI.exe
