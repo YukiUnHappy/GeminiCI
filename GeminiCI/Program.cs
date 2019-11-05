@@ -46,7 +46,7 @@ namespace GeminiCI
 
             Post();
 
-            Upload();
+            //Upload();
         }
 
         static void Enc(byte[] b)
@@ -103,7 +103,7 @@ namespace GeminiCI
             }
         }
 
-        static bool Post()
+        static void Post()
         {
             var Key = Environment.GetEnvironmentVariable("KEY");
 
@@ -131,8 +131,6 @@ namespace GeminiCI
 
             webClient.Headers.Set(HttpRequestHeader.ContentType, "application/json");
             u = JObject.Parse(webClient.UploadString($"{Head}api/url/submit", JsonConvert.SerializeObject(rd)));
-
-            return true;
         }
 
         static string Upload()
@@ -140,9 +138,12 @@ namespace GeminiCI
             using (var client = new HttpClient())
             using (var formData = new MultipartFormDataContent())
             {
+                formData.Headers.Add("filelength", "");
+                client.DefaultRequestHeaders.Add("age", (7 * 24).ToString());
+
                 formData.Add(new ByteArrayContent(File.ReadAllBytes("lm.txt")), "files[]", "file.txt");
 
-                var response = client.PostAsync("https://dmca.gripe/api/upload", formData).Result;
+                var response = client.PostAsync("https://safe.fiery.me/api/upload", formData).Result;
 
                 // ensure the request was a success
                 if (!response.IsSuccessStatusCode)
