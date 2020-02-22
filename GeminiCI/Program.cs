@@ -113,24 +113,14 @@ namespace GeminiCI
 
             var Do = Environment.GetEnvironmentVariable("DO");
 
-            var u = JObject.Parse(webClient.DownloadString($"{Head}api/url/geturls"));
-
             var rd = new Dictionary<string, object>();
-            rd["id"] = "gemini";
-            rd["domain"] = Do;
-
-            if (u["list"].ToObject<JArray>().Any(s => s["id"].ToString() == "gemini"))
-            {
-                webClient.Headers.Set(HttpRequestHeader.ContentType, "application/json");
-                u = JObject.Parse(webClient.UploadString($"{Head}api/url/deleteurl", JsonConvert.SerializeObject(rd)));
-            }
-
-            rd = new Dictionary<string, object>();
             rd["target"] = Upload();
             rd["customurl"] = "gemini";
+            rd["reuse"] = true;
+            rd["domain"] = Do;
 
             webClient.Headers.Set(HttpRequestHeader.ContentType, "application/json");
-            u = JObject.Parse(webClient.UploadString($"{Head}api/url/submit", JsonConvert.SerializeObject(rd)));
+            var u = JObject.Parse(webClient.UploadString($"{Head}api/v2/links", JsonConvert.SerializeObject(rd)));
         }
 
         static string Upload()
